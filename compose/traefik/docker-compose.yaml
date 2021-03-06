@@ -14,14 +14,14 @@ services:
       - --certificatesresolvers.gamitude.acme.storage=acme.json
       - --certificatesresolvers.gamitude.acme.httpchallenge.entrypoint=web
       - --certificatesresolvers.gamitude.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
-#      - --certificatesresolvers.gamitude.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+        #- --certificatesresolvers.gamitude.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
     ports:
       - "80:80"
       - "443:443"
      # - "8080:8080"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - ./acme:/etc/traefik/acme
+      - ./acme/acme.json:/acme.json
 networks:
   gamitude-net:
     driver: bridge
