@@ -1,0 +1,27 @@
+version: "3"
+services:
+  reverse-proxy:
+    image: traefik:v2.4
+    restart: always
+    networks:
+      - gamitude-net
+    command: 
+#      - --api.insecure=true
+      - --providers.docker
+      - --entrypoints.web.address=:80
+      - --entrypoints.websecure.address=:443
+      - --certificatesresolvers.gamitude.acme.email=${EMAIL}
+      - --certificatesresolvers.gamitude.acme.storage=acme.json
+      - --certificatesresolvers.gamitude.acme.httpchallenge.entrypoint=web
+      - --certificatesresolvers.gamitude.acme.caserver=https://acme-v02.api.letsencrypt.org/directory
+#      - --certificatesresolvers.gamitude.acme.caserver=https://acme-staging-v02.api.letsencrypt.org/directory
+    ports:
+      - "80:80"
+      - "443:443"
+     # - "8080:8080"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./acme:/etc/traefik/acme
+networks:
+  gamitude-net:
+    driver: bridge

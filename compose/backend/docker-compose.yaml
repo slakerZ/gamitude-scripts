@@ -1,0 +1,27 @@
+version: "3"
+services:
+  gamitude_backend:
+    image: gamitude/backend:latest
+    container_name: gamitude_backend
+    restart: always
+    networks:
+      - traefik_gamitude-net
+    environment:
+      - 'DatabaseSettings__ConnectionString=${CONNECTION_STRING}'
+      - 'EmailSenderSettings__BaseUrl=${EMAIL_BASE}'
+      - 'EmailSenderSettings__SendGridKey=${EMAIL_KEY}'
+      - 'JwtSettings__Secret=${JWT_KEY}'
+    expose:
+      - "80"
+    labels:
+      - "traefik.enable=true"      
+      - "traefik.http.routers.gamitude-backend.rule=Host(`gamitude.rocks`) && PathPrefix(`/api`)"
+      - "traefik.http.routers.gamitude-backend.tls=true"
+      - "traefik.http.routers.gamitude-backend.tls.certresolver=gamitude"
+      - "traefik.http.routers.gamitude-backend.entrypoints=web"
+      - "traefik.http.routers.gamitude-backend.entrypoints=websecure"
+networks:
+  traefik_gamitude-net:
+    external: true
+
+

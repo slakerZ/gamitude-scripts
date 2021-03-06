@@ -1,0 +1,18 @@
+version: "3"
+services:
+  gamitude_frontend:
+    restart: always
+    image: gamitude/web:latest
+    container_name: gamitude_web
+    networks:
+      - traefik_gamitude-net
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gamitude-frontend.rule=Host(`gamitude.rocks`)"
+      - "traefik.http.routers.gamitude-frontend.tls=true"
+      - "traefik.http.routers.gamitude-frontend.tls.certresolver=gamitude"
+      - "traefik.http.routers.gamitude-frontend.entrypoints=web"
+      - "traefik.http.routers.gamitude-frontend.entrypoints=websecure"
+networks:
+  traefik_gamitude-net:
+    external: true
